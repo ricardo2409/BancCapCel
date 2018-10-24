@@ -1,0 +1,61 @@
+<resources>
+
+    <string name="app_name">CFE</string>
+    <string name="hello_world">Hello world!</string>
+
+    <string name="ip_hint">IP</string>
+    <string name="port_hint">Puerto</string>
+
+    <string name="invalidInput_label">Entrada Invalida</string>
+
+    <string name="configure_label">Configurar</string>
+    <string name="connect_label">Conectar</string>
+    <string name="disconnect_label">Desconectar</string>
+    <string name="accept_label">Aceptar</string>
+    <string name="send_label">Enviar</string>
+    <string name="test">Test</string>
+    <string name="voltage_label">Voltaje:</string>
+    <string name="state_label">Estado:</string>
+    <string name="phase1_label">Fase 1:</string>
+    <string name="phase2_label">Fase 2:</string>
+    <string name="phase3_label">Fase 3:</string>
+
+    <string name="openState_label">Abierto</string>
+    <string name="closedState_label">Cerrado</string>
+
+    <string name="open_label">Abrir</string>
+    <string name="close_label">Cerrar</string>
+    <string name="configuration_label">Configuración:</string>
+
+    <string name="dnp3_label">DNP3</string>
+    <string name="sourceAddress_label">"Dirección Fuente: "</string>
+    <string name="destinationAddress_label">Dirección Destino: </string>
+    <string name="voltageControl_label">Control de Voltaje</string>
+    <string name="minimumVoltage_label">"Voltaje Mínimo: "</string>
+    <string name="program_label">Programar</string>
+
+    <string name="sourceAddress_hint">(1–65535)</string>
+    <string name="destinationAddress_hint">(1–65535)</string>
+
+    <string name="switchToScreen1_label">Cambiar a Pantalla 1</string>
+    <string name="switchToScreen2_label">Cambiar a Pantalla 2</string>
+
+
+    <string name="invalidConfig_message">Configuración Invalida: Verifique todos los campos.</string>
+    <string name="disconnected_message">Debe conectarse para realizar esta acción.</string>
+    <string name="opening_label">Abriendo</string>
+    <string name="closing_label">Cerrando</string>
+    <string name="starting_label">Cerrando</string>
+    <string name="stop_label">Parar</string>
+    <string name="maximumVoltage_label">Voltaje Máximo: </string>
+    <string name="voltageSymbol_label">V</string>
+    <string name="ManOn">ManOn</string>
+    <string name="ManOff">ManOff</string>
+    <string name="RanOn">RadOn</string>
+    <string name="RadOff">RadOff</string>
+    <string name="manon">ManOn</string>
+    <string name="local_remoto">Local / Remoto</string>
+    <string name="textview">TextView</string>
+
+
+</resources>
