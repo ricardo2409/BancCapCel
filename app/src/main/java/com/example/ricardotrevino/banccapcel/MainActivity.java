@@ -1,16 +1,22 @@
 package com.example.ricardotrevino.banccapcel;
 
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
@@ -49,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     static RadioButton phase1OpenButton, phase1CloseButton, phase2OpenButton, phase2CloseButton, phase3OpenButton, phase3CloseButton;
     RadioGroup phase1RadioGroup, phase2RadioGroup, phase3RadioGroup;
     boolean connected = false;
+    String controlPassword = "OK";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +67,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvLocalRemoto = (TextView) findViewById(R.id.tvLocalRemoto);
         switchLocalRemoto = (Switch) findViewById(R.id.switchLocalRemoto);
 
+        openButton = (Button) findViewById(R.id.openButton);
+        openButton.setOnClickListener(this);
+        closeButton = (Button) findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(this);
 
         btnConnect.setOnClickListener(this);
+        switchLocalRemoto.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    //Cambio a Local
+                    if (connected) {
+                        try {
+                            System.out.println("Switch es True");
+                            showPasswordDialog("Ingrese la Contraseña", "Cambio a Local");
+
+                        } catch (Exception e) {
+                            System.out.println("Error: " + e);
+                        }
+                    } else {
+                        showToast("Bluetooth desconectado");
+                    }
+
+                } else {
+                    //Cambio a Remoto
+                    if (connected) {
+                        try {
+                            System.out.println("Switch es False");
+                            sendManOff();
+                            tvLocalRemoto.setText("Remoto");
+                            waitMs(1000);
+
+                        } catch (Exception e) {
+                            System.out.println("Error: " + e);
+                        }
+                    } else {
+                        showToast("Bluetooth desconectado");
+                    }
+
+                }
+            }
+        });
 
 
     }
@@ -270,6 +317,127 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
     }
+    void sendOpen() throws IOException
+    {
+        System.out.println("Estoy en el Open");
+        String msg = "$Abrir&";
+        outputStream.write(msg.getBytes());
+    }
+    void sendClose() throws IOException
+    {
+        System.out.println("Estoy en el Close");
+        String msg = "$Cerrar&";
+        outputStream.write(msg.getBytes());
+    }
+    public void showToast(final String toast)
+    {
+        runOnUiThread(new Runnable() {
+            public void run()
+            {
+                Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    void sendManOn() throws IOException
+    {
+        System.out.println("Estoy en el ManOn");
+        //manOn = true;
+        String msg = "$ManOn&";
+        outputStream.write(msg.getBytes());
+        //Wait para evitar que se cambie solo
+        waitMs(2000);
+
+    }
+
+    void sendManOff() throws IOException
+    {
+        System.out.println("Estoy en el ManOff");
+        //manOn = false;
+        String msg = "$ManOff&";
+        outputStream.write(msg.getBytes());
+        waitMs(2000);
+    }
+    public static void waitMs(int ms) throws IOException{
+        try {
+            // thread to sleep for ms milliseconds
+            //SystemClock.sleep(ms);
+            Thread.sleep(ms);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    void sendPassword(String pass) throws IOException
+    {
+        System.out.println("El control = Pass");
+        //control = "Pass";
+        System.out.println("Estoy en el sendPassword");
+        String msg = "$PASS=" + pass + ",& ";
+        System.out.println("Este es el pass que mando " + msg);
+        outputStream.write(msg.getBytes());
+    }
+    //Input Dialog para ingresar el password para permitir el cambio a remoto
+    public void showPasswordDialog(final String title, final String message){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        final EditText edittext = new EditText(getApplicationContext());
+        edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
+        edittext.setTextColor(getResources().getColor(R.color.black));
+        edittext.setRawInputType(Configuration.KEYBOARD_12KEY);
+        alert.setMessage(message);
+        alert.setTitle(title);
+        alert.setView(edittext);
+
+        alert.setPositiveButton("Ingresar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String pass = edittext.getText().toString();
+                //Pasar el pass con este comando = $PASS=12345,& regresa OK si es correcto o error si incorrecto
+                try{
+                    sendPassword(pass);
+                }catch(IOException e){
+
+                }
+                if(controlPassword.matches("OK")){
+                    Toast.makeText(getApplicationContext(), "Correcto", Toast.LENGTH_SHORT).show();
+                    //eraseColorFromButtons();
+                    try{
+                        System.out.println("Estoy adentro del try del OK");
+                        sendManOn();
+                        tvLocalRemoto.setText("Local");
+                        waitMs(1000);
+
+                    }catch(IOException e){
+                    }
+                }else{
+                    showPasswordDialog(title, "Password Inválido");
+                    //controlPassword = "ERROR";
+                    try{
+                        sendManOff();
+                        tvLocalRemoto.setText("Remoto");
+                        waitMs(1000);
+                    }catch(IOException e){
+                    }
+                }
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Cerrar el input dialog
+                dialog.dismiss();
+                //Regresate a Remoto
+                try{
+                    sendManOff();
+                    tvLocalRemoto.setText("Remoto");
+                    waitMs(1000);
+                }catch(IOException e){
+
+                }
+            }
+        });
+
+        alert.show();
+    }
+
 
 
 
@@ -296,6 +464,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         desconectarBluetooth();
                     }
                     catch (IOException ex) { }
+                }
+                break;
+            case R.id.openButton:
+                if (connected) {
+                    try {
+                        System.out.println("Botón Abrir");
+                        sendOpen();
+                    } catch (Exception e) {
+                        System.out.println("Error: " + e);
+                    }
+                } else {
+                    showToast("Bluetooth desconectado");
+                }
+                break;
+            case R.id.closeButton:
+                if(connected) {
+                    try {
+                        System.out.println("Botón Cerrar");
+                        sendClose();
+                    } catch (Exception e) {
+                        System.out.println("Error: " + e);
+                    }
+                } else {
+                    showToast("Bluetooth desconectado");
                 }
                 break;
         }
