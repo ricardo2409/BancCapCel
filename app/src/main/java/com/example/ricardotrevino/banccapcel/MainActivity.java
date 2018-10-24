@@ -72,6 +72,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         closeButton = (Button) findViewById(R.id.closeButton);
         closeButton.setOnClickListener(this);
 
+        phase1OpenButton = (RadioButton) findViewById(R.id.phase1OpenButton);
+        phase1CloseButton = (RadioButton) findViewById(R.id.phase1ClosedButton);
+        phase2OpenButton = (RadioButton) findViewById(R.id.phase2OpenButton);
+        phase2CloseButton = (RadioButton) findViewById(R.id.phase2ClosedButton);
+        phase3OpenButton = (RadioButton) findViewById(R.id.phase3OpenButton);
+        phase3CloseButton = (RadioButton) findViewById(R.id.phase3ClosedButton);
+        phase1RadioGroup = (RadioGroup) findViewById(R.id.phase1RadioGroup);
+        phase2RadioGroup = (RadioGroup) findViewById(R.id.phase2RadioGroup);
+        phase3RadioGroup = (RadioGroup) findViewById(R.id.phase3RadioGroup);
+
         btnConnect.setOnClickListener(this);
         switchLocalRemoto.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -214,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         phase2RadioGroup.clearCheck();
         phase3RadioGroup.clearCheck();
         switchLocalRemoto.setChecked(false);
+        tvLocalRemoto.setText("");
     }
     void beginListenForData() {
         stopThread = false;
