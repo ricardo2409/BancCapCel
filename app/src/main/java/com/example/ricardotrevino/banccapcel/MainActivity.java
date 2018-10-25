@@ -224,8 +224,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         phase2RadioGroup.clearCheck();
         phase3RadioGroup.clearCheck();
         switchLocalRemoto.setChecked(false);
-        tvLocalRemoto.setText("");
+        tvLocalRemoto.setText(""
+        );
     }
+
     void beginListenForData() {
         stopThread = false;
         thread = new Thread(new Runnable() {
