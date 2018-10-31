@@ -22,6 +22,7 @@ import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,12 +57,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     RadioGroup phase1RadioGroup, phase2RadioGroup, phase3RadioGroup;
     boolean connected = false;
     String controlPassword = "OK";
+    static Toolbar toolbar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         btnConnect = (Button) findViewById(R.id.btnConnect);
         tvVoltaje = (TextView) findViewById(R.id.voltageTextView);
         tvLocalRemoto = (TextView) findViewById(R.id.tvLocalRemoto);
@@ -208,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         resetFields();
         connected = false;
         //tvConect.setText("");
-        btnConnect.setText("Conectar a módulo Bluetooth");
+        btnConnect.setText("Conectar");
         device = null;
         stopThread = true;
         socketConectado = false;
@@ -224,9 +227,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         phase2RadioGroup.clearCheck();
         phase3RadioGroup.clearCheck();
         switchLocalRemoto.setChecked(false);
-        tvLocalRemoto.setText(""
-        );
+        tvLocalRemoto.setText("");
     }
+
 
     void beginListenForData() {
         stopThread = false;
