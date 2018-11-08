@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     static TextView tvVoltaje, tvLocalRemoto, tvBloqueo, tvSenal, tvBateria, tvTemperatura;
     Button openButton, closeButton, btnConnect;
+    static Button btnDesbloqueo;
     static Switch switchLocalRemoto;
     static RadioButton phase1OpenButton, phase1CloseButton, phase2OpenButton, phase2CloseButton, phase3OpenButton, phase3CloseButton;
     RadioGroup phase1RadioGroup, phase2RadioGroup, phase3RadioGroup;
@@ -75,13 +76,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvBateria = (TextView) findViewById(R.id.tvBateria);
         tvTemperatura = (TextView) findViewById(R.id.tvTemperatura);
 
-
         switchLocalRemoto = (Switch) findViewById(R.id.switchLocalRemoto);
 
         openButton = (Button) findViewById(R.id.openButton);
         openButton.setOnClickListener(this);
         closeButton = (Button) findViewById(R.id.closeButton);
         closeButton.setOnClickListener(this);
+        btnDesbloqueo = (Button) findViewById(R.id.btnDesbloqueo);
+        btnDesbloqueo.setOnClickListener(this);
 
         phase1OpenButton = (RadioButton) findViewById(R.id.phase1OpenButton);
         phase1CloseButton = (RadioButton) findViewById(R.id.phase1ClosedButton);
@@ -301,8 +303,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //updateLabels(1, phase1State);
             if (phase1State == 0){
                 phase1OpenButton.setChecked(true);
+                phase1CloseButton.setText("Abierto");
+
             } else{
                 phase1CloseButton.setChecked(true);
+                phase1CloseButton.setText("Cerrado");
+
             }
             flagManOn = Integer.parseInt(tokens[3]);
             if(flagManOn == 1){
@@ -326,26 +332,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             phase2State = Integer.parseInt(tokens[4]);
             //updateLabels(2, phase2State);
 
-            if (phase2State == 0)
+            if (phase2State == 0){
                 phase2OpenButton.setChecked(true);
-            else
+                phase2CloseButton.setText("Abierto");
+            } else{
                 phase2CloseButton.setChecked(true);
+                phase2CloseButton.setText("Cerrado");
+
+            }
+
 
             //phase2Transition = Integer.parseInt(tokens[5]);
 
             phase3State = Integer.parseInt(tokens[6]);
             //updateLabels(3, phase3State);
 
-            if (phase3State == 0)
+            if (phase3State == 0){
                 phase3OpenButton.setChecked(true);
-            else
+                phase3CloseButton.setText("Abierto");
+            }else{
                 phase3CloseButton.setChecked(true);
+                phase3CloseButton.setText("Cerrado");
+            }
 
             bloqueoControl = Integer.parseInt(tokens[9]);
             if(bloqueoControl == 1){
                 tvBloqueo.setText("Bloqueado");
+                btnDesbloqueo.setVisibility(View.VISIBLE);//Mostrar el boton de bloqueo
             }else{
                 tvBloqueo.setText("");
+                btnDesbloqueo.setVisibility(View.GONE);//quitar el boton de bloqueo
+
             }
 
             senal = Integer.parseInt(tokens[12]);
@@ -468,6 +485,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         alert.show();
+    }
+
+    public void changeRadioButtonsText(String text){
+        phase1CloseButton.setText(text);
+        phase2CloseButton.setText(text);
+        phase3CloseButton.setText(text);
+
     }
 
 
