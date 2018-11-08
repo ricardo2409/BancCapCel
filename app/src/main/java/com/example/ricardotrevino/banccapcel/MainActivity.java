@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     static Handler handler = new Handler();
     static String tokens[];
 
-    static TextView tvVoltaje, tvLocalRemoto;
+    static TextView tvVoltaje, tvLocalRemoto, tvBloqueo, tvSenal, tvBateria, tvTemperatura;
     Button openButton, closeButton, btnConnect;
     static Switch switchLocalRemoto;
     static RadioButton phase1OpenButton, phase1CloseButton, phase2OpenButton, phase2CloseButton, phase3OpenButton, phase3CloseButton;
@@ -64,10 +64,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //toolbar = (Toolbar) findViewById(R.id.toolbar);
         btnConnect = (Button) findViewById(R.id.btnConnect);
         tvVoltaje = (TextView) findViewById(R.id.voltageTextView);
         tvLocalRemoto = (TextView) findViewById(R.id.tvLocalRemoto);
+        tvBloqueo = (TextView) findViewById(R.id.tvBloqueo);
+        tvSenal = (TextView) findViewById(R.id.tvSenal);
+        tvBateria = (TextView) findViewById(R.id.tvBateria);
+        tvTemperatura = (TextView) findViewById(R.id.tvTemperatura);
+
+
         switchLocalRemoto = (Switch) findViewById(R.id.switchLocalRemoto);
 
         openButton = (Button) findViewById(R.id.openButton);
@@ -228,6 +234,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         phase3RadioGroup.clearCheck();
         switchLocalRemoto.setChecked(false);
         tvLocalRemoto.setText("");
+        tvVoltaje.setText("");
+        tvBateria.setText("0");
+        tvSenal.setText("0");
+        tvTemperatura.setText("0");
+
     }
 
 
@@ -277,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (frase.contains("s") && tokens.length >= 8) {
             //System.out.println("Contains Status : ");
             float currentVoltage, bateria, temperatura;
-            int phase1State, phase2State, phase3State, paquetes, rssi, senal;
+            int phase1State, phase2State, phase3State, paquetes, rssi, senal, bloqueoControl;
             int phase1Transition, phase2Transition, phase3Transition, flagManOn;
             int currentVoltageControl;
             currentVoltage = Float.parseFloat(tokens[1]);
@@ -327,9 +338,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             else
                 phase3CloseButton.setChecked(true);
 
+            bloqueoControl = Integer.parseInt(tokens[9]);
+            if(bloqueoControl == 1){
+                tvBloqueo.setText("Bloqueado");
+            }else{
+                tvBloqueo.setText("");
+            }
 
+            senal = Integer.parseInt(tokens[12]);
+            tvSenal.setText(Integer.toString(senal));
+            bateria = Float.parseFloat(tokens[13]);
+            tvBateria.setText(Float.toString(bateria) + " V");
+            String auxStringTemp = tokens[14].substring(0,4);
+            System.out.println("Este es el aux string de temp: " + auxStringTemp);
+            if(auxStringTemp.length() < 5){//Validacion porque hay veces en que manda otra cadena pegada y marca error
+                //System.out.println("Es menor");
+                //temperatura = Float.parseFloat(tokens[14]);
+                tvTemperatura.setText(auxStringTemp);
+            }else{
+                System.out.println("Es mayor");
 
-            //waitAndEraseLabels();
+            }
 
         }
     }
@@ -453,7 +482,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         alert.show();
     }
-
 
 
 

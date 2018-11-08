@@ -17,6 +17,13 @@
             android:gravity="center"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/tvBloqueo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -56,7 +63,7 @@
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
@@ -83,11 +90,10 @@
 
                     <RadioButton
                         android:id="@+id/phase1OpenButton"
-                        android:layout_width="100dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:buttonTint="@android:color/holo_green_light"
                         android:clickable="false"
-                        android:text="@string/openState_label"
                         android:textSize="18sp" />
 
                     <RadioButton
@@ -96,7 +102,6 @@
                         android:layout_height="wrap_content"
                         android:buttonTint="@android:color/holo_red_dark"
                         android:clickable="false"
-                        android:text="@string/closedState_label"
                         android:textSize="18sp" />
                 </RadioGroup>
 
@@ -137,11 +142,10 @@
 
                     <RadioButton
                         android:id="@+id/phase2OpenButton"
-                        android:layout_width="100dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:buttonTint="@android:color/holo_green_light"
                         android:clickable="false"
-                        android:text="@string/openState_label"
                         android:textSize="18sp" />
 
                     <RadioButton
@@ -150,7 +154,6 @@
                         android:layout_height="wrap_content"
                         android:buttonTint="@android:color/holo_red_dark"
                         android:clickable="false"
-                        android:text="@string/closedState_label"
                         android:textSize="18sp" />
                 </RadioGroup>
 
@@ -191,11 +194,10 @@
 
                     <RadioButton
                         android:id="@+id/phase3OpenButton"
-                        android:layout_width="100dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:buttonTint="@android:color/holo_green_light"
                         android:clickable="false"
-                        android:text="@string/openState_label"
                         android:textSize="18sp" />
 
                     <RadioButton
@@ -204,7 +206,6 @@
                         android:layout_height="wrap_content"
                         android:buttonTint="@android:color/holo_red_dark"
                         android:clickable="false"
-                        android:text="@string/closedState_label"
                         android:textSize="18sp" />
                 </RadioGroup>
 
@@ -249,7 +250,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="30dp" />
+                android:layout_height="10dp" />
 
             <Switch
                 android:id="@+id/switchLocalRemoto"
@@ -265,7 +266,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="30dp" />
+                android:layout_height="10dp" />
 
             <TextView
                 android:id="@+id/tvLocalRemoto"
@@ -276,7 +277,85 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="50dp" />
+                android:layout_height="0dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvSenal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="0"
+                        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+                    <TextView
+                        android:id="@+id/textView13"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="Señal"
+                        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvBateria"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="0"
+                        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+                    <TextView
+                        android:id="@+id/textView14"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="Batería"
+                        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvTemperatura"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="0"
+                        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+                    <TextView
+                        android:id="@+id/textView15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="Temperatura"
+                        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
 
             <Button
                 android:id="@+id/btnConnect"
