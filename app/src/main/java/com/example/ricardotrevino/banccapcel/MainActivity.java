@@ -58,12 +58,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     boolean connected = false;
     String controlPassword = "OK";
     static Toolbar toolbar;
+    boolean boolPassword;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        boolPassword = false;
         //toolbar = (Toolbar) findViewById(R.id.toolbar);
         btnConnect = (Button) findViewById(R.id.btnConnect);
         tvVoltaje = (TextView) findViewById(R.id.voltageTextView);
@@ -97,12 +99,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (isChecked) {
                     //Cambio a Local
                     if (connected) {
-                        try {
-                            System.out.println("Switch es True");
-                            showPasswordDialog("Ingrese la Contraseña", "Cambio a Local");
+                        try{
+                            System.out.println("Estoy adentro del manon");
+                            sendManOn();
+                            //tvLocalRemoto.setText("Local");
+                            waitMs(1000);
 
-                        } catch (Exception e) {
-                            System.out.println("Error: " + e);
+                        }catch(IOException e){
                         }
                     } else {
                         showToast("Bluetooth desconectado");
@@ -111,14 +114,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     //Cambio a Remoto
                     if (connected) {
-                        try {
-                            System.out.println("Switch es False");
+                        try{
+                            boolPassword = false; //Quita el password cuando se regresa a remoto
+                            System.out.println("Estoy adentro del try del manoff");
                             sendManOff();
-                            tvLocalRemoto.setText("Remoto");
+                            //tvLocalRemoto.setText("Remoto");
                             waitMs(1000);
 
-                        } catch (Exception e) {
-                            System.out.println("Error: " + e);
+                        }catch(IOException e){
                         }
                     } else {
                         showToast("Bluetooth desconectado");
@@ -444,23 +447,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(controlPassword.matches("OK")){
                     Toast.makeText(getApplicationContext(), "Correcto", Toast.LENGTH_SHORT).show();
                     //eraseColorFromButtons();
-                    try{
-                        System.out.println("Estoy adentro del try del OK");
-                        sendManOn();
-                        tvLocalRemoto.setText("Local");
-                        waitMs(1000);
+                    boolPassword = true;
 
-                    }catch(IOException e){
-                    }
                 }else{
                     showPasswordDialog(title, "Password Inválido");
                     //controlPassword = "ERROR";
-                    try{
-                        sendManOff();
-                        tvLocalRemoto.setText("Remoto");
-                        waitMs(1000);
-                    }catch(IOException e){
-                    }
+                    boolPassword = false;
+
                 }
             }
         });
@@ -470,13 +463,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // Cerrar el input dialog
                 dialog.dismiss();
                 //Regresate a Remoto
-                try{
-                    sendManOff();
-                    tvLocalRemoto.setText("Remoto");
-                    waitMs(1000);
-                }catch(IOException e){
 
-                }
             }
         });
 
@@ -512,24 +499,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.openButton:
                 if (connected) {
-                    try {
-                        System.out.println("Botón Abrir");
-                        sendOpen();
-                    } catch (Exception e) {
-                        System.out.println("Error: " + e);
+                    if(boolPassword){
+                        try {
+                            System.out.println("Botón Abrir");
+                            sendOpen();
+                        } catch (Exception e) {
+                            System.out.println("Error: " + e);
+                        }
+                    }else{
+                        showPasswordDialog("Ingresa el Password" ,"");
                     }
+
                 } else {
                     showToast("Bluetooth desconectado");
                 }
                 break;
             case R.id.closeButton:
                 if(connected) {
-                    try {
-                        System.out.println("Botón Cerrar");
-                        sendClose();
-                    } catch (Exception e) {
-                        System.out.println("Error: " + e);
+                    if(boolPassword){
+                        try {
+                            System.out.println("Botón Cerrar");
+                            sendClose();
+                        } catch (Exception e) {
+                            System.out.println("Error: " + e);
+                        }
+                    }else{
+                        showPasswordDialog("Ingresa el Password" ,"");
                     }
+
                 } else {
                     showToast("Bluetooth desconectado");
                 }
