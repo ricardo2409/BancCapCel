@@ -219,13 +219,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             socket.close();
             socket = null;
         }
-        resetFields();
         connected = false;
         //tvConect.setText("");
         btnConnect.setText("Conectar");
         device = null;
         stopThread = true;
         socketConectado = false;
+        resetFields();
+        boolPassword = false; //Para que lo vuelva a pedir la siguiente vez que se conecte a otro equipo
+
+
 
     }
 
@@ -243,6 +246,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tvBateria.setText("0");
         tvSenal.setText("0");
         tvTemperatura.setText("0");
+        tvBloqueo.setText("");
+        btnDesbloqueo.setVisibility(View.GONE);
+        phase1CloseButton.setText("");
+        phase2CloseButton.setText("");
+        phase3CloseButton.setText("");
+
+
 
     }
 
@@ -441,6 +451,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         System.out.println("Este es el pass que mando " + msg);
         outputStream.write(msg.getBytes());
     }
+    void sendDesbloqueo() throws IOException
+    {
+        //control = "Pass";
+        System.out.println("Estoy en el SendBloqueo");
+        String msg = "$$SinTiemp&& ";
+        outputStream.write(msg.getBytes());
+    }
     //Input Dialog para ingresar el password para permitir el cambio a remoto
     public void showPasswordDialog(final String title, final String message){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -487,12 +504,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         alert.show();
     }
 
-    public void changeRadioButtonsText(String text){
-        phase1CloseButton.setText(text);
-        phase2CloseButton.setText(text);
-        phase3CloseButton.setText(text);
-
-    }
 
 
 
@@ -544,6 +555,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         try {
                             System.out.println("Botón Cerrar");
                             sendClose();
+                        } catch (Exception e) {
+                            System.out.println("Error: " + e);
+                        }
+                    }else{
+                        showPasswordDialog("Ingresa el Password" ,"");
+                    }
+
+                } else {
+                    showToast("Bluetooth desconectado");
+                }
+                break;
+
+            case R.id.btnDesbloqueo:
+                if(connected) {
+                    if(boolPassword){
+                        try {
+                            System.out.println("Botón Desbloqueo");
+                            sendDesbloqueo();
                         } catch (Exception e) {
                             System.out.println("Error: " + e);
                         }
